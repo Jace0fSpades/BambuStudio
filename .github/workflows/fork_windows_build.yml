@@ -1,0 +1,22 @@
+name: Fork Windows build
+
+# Builds only the Windows x64 portable app for this fork's fix branch,
+# reusing the upstream deps/app build workflows.
+on:
+  push:
+    branches:
+      - ci/windows-build
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_windows:
+    name: Build Windows x64
+    uses: ./.github/workflows/build_check_cache.yml
+    with:
+      os: windows-latest
+      build-deps-only: false
+    secrets: inherit
